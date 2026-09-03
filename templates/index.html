@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rock Paper Scissors</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body data-result-type="{% if result %}{% if 'Won' in result %}win{% elif 'Draw' in result %}draw{% elif 'Computer' in result %}lose{% endif %}{% else %}none{% endif %}">
+    
+    <div class="game-container">
+        
+        <header class="game-header">
+            <div class="score-board">
+                <span class="player-score">YOU: <span id="score-you">0</span></span>
+                <span class="round-badge">ROUND: <span id="round-num">1</span></span>
+                <span class="computer-score">CPU: <span id="score-cpu">0</span></span>
+            </div>
+        </header>
+
+        <div class="hero-section">
+            <h1>ROCK PAPER SCISSORS</h1>
+            <p class="subtitle">Choose your move. Beat the computer.</p>
+            <div class="status-indicator">
+                <span id="status-dot" class="dot ready"></span>
+                <span id="status-text">READY TO PLAY</span>
+            </div>
+        </div>
+
+        {% if not result %}
+        <form method="POST" id="game-form" class="choices-container">
+            <button type="button" class="choice-card" data-choice="rock">
+                <div class="emoji-wrapper">🪨</div>
+                <div class="choice-name">ROCK</div>
+            </button>
+            <button type="button" class="choice-card" data-choice="paper">
+                <div class="emoji-wrapper">📄</div>
+                <div class="choice-name">PAPER</div>
+            </button>
+            <button type="button" class="choice-card" data-choice="scissors">
+                <div class="emoji-wrapper">✂️</div>
+                <div class="choice-name">SCISSORS</div>
+            </button>
+            <input type="hidden" name="choice" id="choice-input">
+        </form>
+        {% else %}
+        <div class="result-screen">
+            <div class="vs-layout">
+                <div class="player-side animate-slide-in-left">
+                    <div class="side-label">YOU</div>
+                    <div class="choice-card static">
+                        <div class="emoji-wrapper">
+                            {% if player == 'rock' %}🪨
+                            {% elif player == 'paper' %}📄
+                            {% else %}✂️{% endif %}
+                        </div>
+                        <div class="choice-name">{{ player | upper }}</div>
+                    </div>
+                </div>
+                
+                <div class="vs-badge animate-pop-in">VS</div>
+                
+                <div class="computer-side animate-slide-in-right">
+                    <div class="side-label">COMPUTER</div>
+                    <div class="choice-card static">
+                        <div class="emoji-wrapper">
+                            {% if computer == 'rock' %}🪨
+                            {% elif computer == 'paper' %}📄
+                            {% else %}✂️{% endif %}
+                        </div>
+                        <div class="choice-name">{{ computer | upper }}</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="result-message-container animate-fade-up">
+                {% if 'Won' in result %}
+                    <h2 class="result-title win">🎉 YOU WON!</h2>
+                    <p class="result-desc">Congratulations! You outplayed the computer!</p>
+                {% elif 'Draw' in result %}
+                    <h2 class="result-title draw">🤝 IT'S A DRAW!</h2>
+                    <p class="result-desc">Great minds think alike!</p>
+                {% else %}
+                    <h2 class="result-title lose">😂 COMPUTER WON!</h2>
+                    <p class="result-desc">Oops! The computer got you this time! 😜</p>
+                {% endif %}
+            </div>
+
+            <a href="/" class="play-again-btn animate-fade-up">⚡ PLAY AGAIN</a>
+        </div>
+        {% endif %}
+
+    </div>
+
+    <script src="{{ url_for('static', filename='script.js') }}"></script>
+</body>
+</html>
